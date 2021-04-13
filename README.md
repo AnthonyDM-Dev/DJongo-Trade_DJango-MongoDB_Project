@@ -25,7 +25,7 @@ Project is created with:
 
 ## Start.py script - Migration and account creation
 By running the script "start.py", migration and a superuser account will be created for you in just one command:
-####Superuser credentials:
+- Superuser credentials:
 - username: admin
 - password: admin
 
