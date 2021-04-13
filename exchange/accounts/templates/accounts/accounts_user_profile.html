@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% load app_extras %}
+
+{% block content %}
+
+<header style="background: url(../../static/images/abstract-panel.jpg); min-height: 600px;">
+  {% include 'navbar.html' %}
+
+    <!-- Section: User profile -->
+    <section class="container section scrollspy" id="services">
+          <div class="row">
+
+              <!-- Profile info -->
+              <h3 class="blue-text text-darken-4">Profile Private Area</h3>
+              <ul class="collection">
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Username: </strong>{{ user_obj.username }}</li>
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>First name: </strong>{{ user_obj.first_name }}</li>
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Last name: </strong>{{ user_obj.last_name }}</li>
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>IP address list: </strong>{{ profile_info.ip_address_list }}</li>
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Last login: </strong>{{ profile_info.last_login }}</li>
+              </ul>
+
+              <!-- Security area -->
+              <div>
+                  <h4 class="blue-text text-darken-4">Security settings</h4>
+                  <a class="btn white-text blue darken-4" href="{% url 'change-password-view' %}" style="margin: 10px;;">Change your password here</a>
+              </div>
+
+              <!-- Wallet info -->
+              <h3 class="blue-text text-darken-4">Your Wallet</h3>
+              <ul class="collection">
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Total bitcoins balance: </strong>{{ wallet_info.btc_balance|floatformat:8 }} BTC</li>
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Bitcoins available: </strong>{{ wallet_info.btc_available|floatformat:8 }} BTC</li>
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Total usd balance: </strong>{{ wallet_info.usd_balance|floatformat:4 }} $</li>
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Usd available: </strong>{{ wallet_info.usd_available|floatformat:4 }} $</li>
+              </ul>
+              <h4 class="blue-text text-darken-4">Profits and losses</h4>
+              <ul class="collection">
+                  <li class="collection-item flow-text blue darken-4 white-text"><strong>Total usd earned: </strong>{{ profit_usd|floatformat:4 }} $</li>
+              </ul>
+          </div>
+
+          <!-- Orders Tables -->
+
+          <!-- Get Json Files -->
+          <div class="container">
+              <a class="btn-large blue darken-4 white-text center" href="{% url 'user-profile-view' id=wallet_info.user.id %}json" name="json-profile-view" style="margin: 10px;">
+              Get Json File</a>
+          </div>
+
+          <!-- Messages -->
+          <div class="container">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="card green lighten-2 white-text">
+                {% elif 'error' in message.tags %}
+                    <div class="card red lighten-2 white-text">
+                {% endif %}
+                        <div class=" card-content center">
+                            <h5 class="">{{ message }}</h5>
+                        </div>
+                    </div>
+            {% endfor %}
+          </div>
+
+          <!-- Orders -->
+          <div class="col s12 l12" id="cards">
+            <div class="container">
+                <div class="row">
+
+                    <!-- Active orders -->
+                    <div class="col s12 m6">
+                      <div class="card blue darken-4">
+                          <div class="card-action center-align flow-text white-text">
+                              ACTIVE ORDERS
+                          </div>
+
+                          <div class="card-content">
+                              <table class="centered highlight responsive-table blue darken-4 white-text">
+                                <thead>
+                                  <tr>
+                                      <th>Quantity (BTC)</th>
+                                      <th>Value (USD)</th>
+                                      <th>Type</th>
+                                      <th>Depth (USD)</th>
+                                      <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for order in open_orders %}
+                                  <tr>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ order.price_limit }}</td>
+                                    <td>{{ order.type }}</td>
+                                    <td>{% multiply order.price_limit order.quantity %}</td>
+                                    <td>
+                                        <form action="." method="POST"> {% csrf_token %}
+                                            <button class="btn red lighten-2 white-text" type="submit" name="delete" value="{{ order.pk }}">
+                                                <i class="material-icons prefix">delete</i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                              </table>
+                          </div>
+                      </div>
+                    </div>
+
+                    <!-- Trades list -->
+                    <div class="col s12 m6">
+                      <div class="card blue darken-4 white-text">
+                        <div class="card-action center-align flow-text white-text">
+                              YOUR TRADES
+                        </div>
+                        <div class="card-content">
+                          <table class="centered highlight responsive-table blue darken-4 white-text">
+                            <thead>
+                              <tr>
+                                  <th>Type</th>
+                                  <th>Quantity (BTC)</th>
+                                  <th>Value (USD)</th>
+                                  <th>Date</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {% for trade in user_trades %}
+                              <tr>
+                                  {% if trade.buyer_user == user_obj and trade.seller_user == user_obj %}
+                                    <td>{{ "Buy & Sell" }}</td>
+                                  {% elif trade.buyer_user == user_obj %}
+                                    <td>{{ "buy" }}</td>
+                                  {% else %}
+                                    <td>{{ "sell" }}</td>
+                                  {% endif %}
+                                <td>{{ trade.quantity }}</td>
+                                <td>{{ trade.price }}</td>
+                                <td>{{ trade.datetime }}</td>
+                              </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+          </div>
+
+    </section>
+
+</header>
+{% endblock %}

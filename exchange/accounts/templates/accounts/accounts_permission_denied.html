@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<header>
+  {% include 'navbar.html' %}
+
+    <!-- Card: Permission denied -->
+    <div class="container">
+      <div class="col s12 m7">
+        <h3 class="blue-text text-darken-4">Warning!</h3>
+        <div class="card horizontal blue darken-4 white-text">
+          <div class="card-stacked">
+            <div class="card-content">
+              <h1 class="center-align">You are not authorized to see this page.</h1>
+              <div class="card-action center">
+                <a class="btn white blue-text text-darken-4" href="{% url 'homepage-view' %}" name="next" style="margin: 10px;">Return Home</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</header>
+
+{% endblock %}

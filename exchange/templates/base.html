@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Materialize CSS stuff -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+
+    <!-- Styling the title -->
+    <title>DJongo-Trade - Let's trade with DJongo!</title>
+    <link rel="icon" type ="image/x-icon" href="{% static '/images/bit-icon.jpg' %}">
+
+    <!-- Just a little of CSS -->
+    <style>
+        header {
+            background: url(../static/images/exchange-bg.jpg);
+            background-size: cover;
+            background-position: center;
+            min-height: 600px;
+        }
+        /* Button colors in tab section */
+        .tabs .indicator {
+            height: 6px;
+            background-color:#e57373;
+        }
+        .tabs .tab a:focus, .tabs .tab a:focus.active {
+            background:#e57373;
+        }
+        /* Mobile optimization */
+        @media screen and (max-width: 670px){
+            header {
+            min-height: 500px;
+            }
+        /* Mobile Homepage editing */
+        .section {
+            padding-top: 4vw;
+            padding-bottom: 4vw;
+        }
+        /* Mobile Button colors in tab section */
+        .tabs .indicator {
+            height: 4px;
+            background-color:#e57373;
+        }
+        .tabs .tab a:focus, .tabs .tab a:focus.active {
+            background:#e57373;
+        }
+    </style>
+</head>
+
+<body class="blue darken-4">
+
+
+  {% block content %}
+  {% endblock %}
+
+  <!-- Footer -->
+  <footer class="page-footer blue-grey lighten-1">
+    <div class="container">
+      <div class="row">
+        <div class="col s12 l6">
+          <h5 class="white-text">DJongo-Trade has been made by:</h5>
+          <p>Anthony Dei Medici</p>
+          <p>Click on the icons here and get in touch!</p>
+        </div>
+        <div class="col s12 l4 offset-l2">
+          <h5>Connect</h5>
+            <a href="https://www.instagram.com/anthony.deimedici/?hl=it" class="tooltipped btn-floating btn-small transparent" data-tooltip="This is Instagram">
+              <i class="fab fa-instagram white blue-grey-text lighten-1"></i>
+            </a>
+            <a href="https://www.facebook.com/Dei.Medici.Anthony" class="tooltipped btn-floating btn-small transparent" data-tooltip="This is Facebook">
+              <i class="fab fa-facebook white blue-grey-text lighten-1"></i>
+            </a>
+            <a href="https://github.com/AnthonyDM-Dev" class="tooltipped btn-floating btn-small transparent" data-tooltip="This is Git Hub">
+              <i class="fab fa-github white blue-grey-text lighten-1"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/anthony-dm-dev/" class="tooltipped btn-floating btn-small transparent" data-tooltip="This is Linked In">
+              <i class="fab fa-linkedin white blue-grey-text lighten-1"></i>
+            </a>
+
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright blue-grey darken-4">
+      <div class="container center-align">&copy; 2021 DJongo-Trade</div>
+    </div>
+  </footer>
+
+
+    <!-- JavaScript area for responsive site -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('.sidenav').sidenav();
+        $('.tooltipped').tooltip();
+        $('.scrollspy').scrollSpy();
+        $('.materialboxed').materialbox();
+        $('.parallax').parallax();
+        $('.tabs').tabs();
+        $('#textarea1').val('');
+        $('select').formSelect();
+        M.textareaAutoResize($('#textarea1'));
+      })
+    </script>
+</body>
+</html>

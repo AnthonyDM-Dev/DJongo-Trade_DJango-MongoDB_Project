@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% load app_extras %}
+
+{% block content %}
+
+<header xmlns="http://www.w3.org/1999/html">
+  {% include 'navbar.html' %}
+
+    <!-- Wallet_Table -->
+    <div class="col s12 blue darken-4" id="table">
+      <div class="col s12 l12">
+        <h4 class="white-text center-align"><strong>Your Wallet</strong></h4>
+      </div>
+        <div class="row card">
+            <table class="centered highlight responsive-table blue darken-4">
+                <thead>
+                  <tr class="white-text flow-text">
+                      <th>Total bitcoins</th>
+                      <th>Bitcoins available</th>
+                      <th>Total dollars</th>
+                      <th>Dollars available</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="white-text flow-text">
+                    <td>{{ user_wallet.btc_balance|floatformat:8 }}</td>
+                    <td>{{ user_wallet.btc_available|floatformat:8 }}</td>
+                    <td>{{ user_wallet.usd_balance|floatformat:4 }}$</td>
+                    <td>{{ user_wallet.usd_available|floatformat:4 }}$</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <section class="container section scrollspy" id="services">
+      <div class="container row">
+        <div class="col s12 l12">
+            <h2 class="blue-text text-darken-4 center-align">Marketplace</h2>
+
+            <!-- Data -->
+            <div class="card horizontal center-align white-text blue darken-4">
+              <div class="card-stacked">
+                <div class="card-content">
+                  <h5>Live data from Coin Market Cap!</h5>
+                  <h5><a href="https://coinmarketcap.com/currencies/bitcoin/" class="orange-text text-lighten-2">
+                      [ Bitcoin price: {{ market_price|floatformat:4 }} $ ]</a></h5>
+                </div>
+                <div class="card-content">
+                  {% if last_price == "empty" %}
+                    <h4 class="white-text center-align">Last trade price: no trades yet.</h4>
+                  {% else %}
+                    <h4 class="white-text center-align">Last trade price: {{ last_price|floatformat:4 }}$</h4>
+                  {% endif %}
+                  {% if buy_open_orders_list or sell_open_orders_list %}
+                  {% else %}
+                    <h4 class="white-textcenter-align">The Order Book is empty!</br>Be the first to submit an order!</h4>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+        </div>
+        <div class="col s12 l12">
+            <ul class="tabs" style="background-color:white;">
+              <li class="tab col s6">
+                <a href="#buy-card" class="white-text blue darken-4">
+                    Buy Order
+                </a>
+              </li>
+              <li class="tab col s6">
+                <a href="#sell-card" class="white-text blue darken-4">
+                    Sell Order
+                </a>
+              </li>
+            </ul>
+
+            <!-- Card: Buy Order -->
+            <div class="container" id="buy-card">
+              <div class="row card blue darken-4">
+                  <div class="card-stacked">
+                    <div class="card-content">
+                      <form action="." method="POST"> {% csrf_token %}
+                          {{ form.as_p }}
+                          <input class="btn white blue-text text-darken-4" type="submit" value="Submit buy order" name="buy" style="margin: 10px;"/>
+                      </form>
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+
+            <!-- Card: Sell Order -->
+            <div class="container" id="sell-card">
+              <div class="row card blue darken-4">
+                  <div class="card-stacked">
+                    <div class="card-content">
+                      <form action="." method="POST"> {% csrf_token %}
+                            {{ form.as_p }}
+                            <input class="btn white blue-text text-darken-4" type="submit" value="Submit sell order" name="sell" style="margin: 10px;"/>
+                      </form>
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+
+            <!-- Messages -->
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="card green lighten-2 white-text">
+                {% elif 'error' in message.tags %}
+                    <div class="card red lighten-2 white-text">
+                {% endif %}
+                    <div class=" card-content center">
+                        <h5 class="">{{ message }}</h5>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Order Tables -->
+    <div class="col s12 l12" id="cards">
+        <div class="container">
+            <div class="row">
+
+                <!-- Get Json Files -->
+                {% if request.user.is_staff %}
+                    <div class="container center">
+                      <a class="btn-large blue darken-4 white-text center" href="{% url 'json-all-orders-view' %}" name="json-all-orders-view" style="margin: 10px;">
+                      Get Json File of all active orders (Staff Only)</a>
+                    </div>
+                {% endif %}
+
+                <!-- Buy orders -->
+                <div class="col s12 m6">
+                  <div class="card blue darken-4">
+                      <div class="card-action center-align flow-text white-text">
+                          BID - BUY ORDERS
+                      </div>
+                    <div class="card-content">
+                      <table class="centered highlight responsive-table blue darken-4 white-text">
+                        <thead>
+                          <tr>
+                              <th>Quantity (BTC)</th>
+                              <th>Value (USD)</th>
+                              <th>Depth (USD)</th>
+                              <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for order in buy_open_orders_list %}
+                          <tr>
+                            <td>{{ order.quantity }}</td>
+                            <td>{{ order.price_limit }}</td>
+                            <td>{% multiply order.price_limit order.quantity %}</td>
+                            <td>{% if order.user.id == user_wallet.user.id %}
+                                    <form action="." method="POST"> {% csrf_token %}
+                                        <button class="btn red lighten-2 white-text" type="submit" name="delete" value="{{ order.pk }}">
+                                            <i class="material-icons prefix">arrow_back_ios</i>
+                                            <i class="material-icons prefix">delete</i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sell orders -->
+                <div class="col s12 m6">
+                  <div class="card blue darken-4 white-text">
+                    <div class="card-action center-align flow-text white-text">
+                          ASK - SELL ORDERS
+                    </div>
+                    <div class="card-content">
+                      <table class="centered highlight responsive-table blue darken-4 white-text">
+                        <thead>
+                          <tr>
+                              <th>Quantity (BTC)</th>
+                              <th>Value (USD)</th>
+                              <th>Depth (USD)</th>
+                              <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for order in sell_open_orders_list %}
+                          <tr>
+                            <td>{{ order.quantity }}</td>
+                            <td>{{ order.price_limit }}</td>
+                            <td>{% multiply order.price_limit order.quantity %}</td>
+                            <td>{% if order.user.id == user_wallet.user.id %}
+                                    <form action="." method="POST"> {% csrf_token %}
+                                        <button class="btn red lighten-2 white-text" type="submit" name="delete" value="{{ order.pk }}">
+                                            <i class="material-icons prefix">arrow_back_ios</i>
+                                            <i class="material-icons prefix">delete</i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</header>
+
+{% endblock %}

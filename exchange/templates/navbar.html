@@ -1,0 +1,41 @@
+<nav class="nav-wraper blue darken-4 z-depth-5">
+  <div class="container">
+    <a href="{% url 'homepage-view' %}" class="brand-logo">DJongo Trade</a>
+    <a href="#" class="sidenav-trigger" data-target="mobile-links">
+      <i class="material-icons">menu</i>
+    </a>
+    <ul class="right hide-on-med-and-down hide-on-large">
+      <li><a href="{% url 'homepage-view' %}">Home</a></li>
+      <li><a href="{% url 'exchange-view' %}">Let's trade!</a></li>
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#contact">Contacts</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'user-profile-view' id=user.id %}">Profile</a></li>
+        <li>Hi, {{ request.user }}!</li>
+        <li><a href="{% url 'logout-view' %}" class="tooltipped btn-floating btn-small indigo darken-3" data-tooltip="Logout">
+            <i class="material-icons white indigo-text">logout</i>
+        </a></li>
+      {% else %}
+        <li><a href="{% url 'register-view' %}">Sign up</a></li>
+        <li><a href="{% url 'login-view' %}">Login</a></li>
+      {% endif %}
+    </ul>
+  </div>
+
+  <ul class="sidenav" id="mobile-links">
+    {% if user.is_authenticated %}
+      <li class="center-align black-text flow-text">Hi, {{ request.user }}!</li>
+    {% endif %}
+    <li><a href="{% url 'homepage-view' %}" class="sidenav-close">Home</a></li>
+    <li><a href="{% url 'exchange-view' %}" class="sidenav-close">Let's trade!</a></li>
+    <li><a href="/#about" class="sidenav-close">About</a></li>
+    <li><a href="/#contact" class="sidenav-close">Contact me</a></li>
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'user-profile-view' id=user.id %}" class="sidenav-close">Profile</a></li>
+      <li><a href="{% url 'logout-view' %}" class="sidenav-close">Logout</a></li>
+    {% else %}
+      <li><a href="{% url 'login-view' %}" class="sidenav-close">Login</a></li>
+      <li><a href="{% url 'register-view' %}" class="sidenav-close">Sign up</a></li>
+    {% endif %}
+  </ul>
+</nav>

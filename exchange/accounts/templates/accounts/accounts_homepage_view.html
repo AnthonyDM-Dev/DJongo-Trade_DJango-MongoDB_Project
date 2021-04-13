@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<!-- Nav bar -->
+<header>
+  {% include 'navbar.html' %}
+</header>
+
+<!-- Grid -->
+<section class="container blue darken-4 section scrollspy" id="about">
+    <div class="row valign-wrapper">
+      <div class="col s12 center">
+        <h2 class="white-text">Welcome to DJongo-Trade!</h2>
+        <h5 class="white-text">Receive free BTC & dollars at sign up and start earning thanks to this simple trading platform!</h5>
+        <p class="white-text flow-text">Wanna check out? <a class="btn white blue-text text-darken-4" href="{% url 'register-view' %}">Sign Up</a>
+           or <a class="btn white blue-text text-darken-4" href="{% url 'exchange-view' %}">Login and trading!</a></p>
+      </div>
+    </div>
+</section>
+
+
+<!-- Parallax -->
+<div class="parallax-container">
+  <div class="parallax">
+    <img src="{% static '/images/bit-image.jpg' %}" alt="safe content" class="responsive-img"/>
+  </div>
+</div>
+
+<!-- contact form -->
+  <section class="section container scrollspy" id="contact">
+    <div class="row">
+      <div class="col s12 l5">
+        <h2 class="white-text">Get In Touch</h2>
+        <p class="white-text flow-text">If you want to contact me to have more info about it or to simply write me a message,
+          you can do it here!</p>
+
+      </div>
+      <div class="col s12 l5 offset-l2">
+        <form action="">
+          <div class="input-field">
+            <i class="material-icons white-text prefix">email</i>
+            <input type="email" id="email"/>
+            <label for="email" class="white-text">Your Email</label>
+          </div>
+          <div class="input-field">
+            <i class="material-icons white-text prefix">message</i>
+            <textarea class="materialize-textarea" id="message" name="" rows="" cols=""></textarea>
+            <label for="message" class="white-text">Your Message</label>
+          </div>
+          <div class="input-field center">
+            <button class="tooltipped btn white blue-text text-darken-4" data-tooltip="Not yet linked!">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
