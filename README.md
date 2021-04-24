@@ -31,7 +31,7 @@ By running the script "start.py", migration and a superuser account will be crea
 
 ## DJongo-Trade PDF Presentation
 To have a preview of the site you can have a look at my PDF
-presentation file: "Progetto-MongoDB-di-Anthony-Dei-Medici.pdf"
+presentation file: "[Progetto-MongoDB-di-Anthony-Dei-Medici.pdf](https://github.com/AnthonyDM-Dev/DJongo-Trade_DJango-MongoDB_Project/blob/master/Progetto-MongoDB-di-Anthony-Dei-Medici.pdf)"
 
 ## Contact Information
 Anthony Dei Medici - anthony.deimedici@gmail.com
