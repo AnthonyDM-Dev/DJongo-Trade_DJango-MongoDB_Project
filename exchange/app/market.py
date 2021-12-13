@@ -13,7 +13,7 @@ class Bot_CMC:
         }
         self.headers = {
             'Accepts': 'application/json',
-            'X-CMC_PRO_API_KEY': '352abe10-b2a6-4bd9-9a1d-59e57cd0bac6'
+            'X-CMC_PRO_API_KEY': '<YOUR API KEY>'
         }
 
     def get_data(self):
